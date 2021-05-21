@@ -11,6 +11,9 @@ module.exports = {
     filename: 'index.js',
     assetModuleFilename: 'images/[name][ext]',
   },
+  devServer: {
+    contentBase: './dist',
+  },
   module: {
     rules: [
       {
@@ -23,6 +26,9 @@ module.exports = {
           'html-loader',
           {
             loader: path.resolve(__dirname, 'lib/index.js'),
+            options: {
+              root: './example',
+            },
           },
         ],
       },

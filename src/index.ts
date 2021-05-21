@@ -1,11 +1,35 @@
-import { LoaderContext } from 'webpack';
-import { compile } from 'ejs';
-import { resolve } from 'path';
+import { compile, Options } from 'ejs'
+import { LoaderContext } from 'webpack'
 
-export default function ejsLoader(this: LoaderContext<{}>, content: string) {
-  const template = compile(content, {
-    root: resolve(__dirname, '../example'),
-  })();
+import { AdditionalData, SourceMap } from './types'
 
-  return template;
+export default async function ejsLoader(
+  this: LoaderContext<Options & { data: any }>,
+  content: string,
+  sourceMap: string | SourceMap,
+  additionalData: AdditionalData
+) {
+  const callback = this.async()
+
+  const loaderOptions = this.getOptions()
+  const ejsOptions = Object.assign(
+    {
+      filename: this.resourcePath,
+    },
+    loaderOptions
+  )
+
+  const template = await compile(content, ejsOptions)(loaderOptions.data)
+
+  const dependencyPattern = /<%[_\W]?\s*include\(.*\)\s*[_\W]?%>/g
+
+  const matches = dependencyPattern.exec(template)
+  const dependencies: string[] = []
+
+  if (matches === null) {
+  } else {
+    matches.forEach((match) => {})
+  }
+
+  callback(null, template, sourceMap, additionalData)
 }
