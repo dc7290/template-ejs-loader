@@ -1,3 +1,5 @@
+import { resolve } from 'path'
+
 import { compile, Options } from 'ejs'
 import { LoaderContext } from 'webpack'
 
@@ -19,33 +21,40 @@ export default async function ejsLoader(
     loaderOptions
   )
 
-  const template = await compile(content, ejsOptions)(loaderOptions.data)
+  try {
+    const template = await compile(content, ejsOptions)(loaderOptions.data)
+    const dependencyPattern = /<%[_\W]?\s*include\(.*\)\s*[_\W]?%>/g
 
-  const dependencyPattern = /<%[_\W]?\s*include\(.*\)\s*[_\W]?%>/g
+    let matches = dependencyPattern.exec(content)
+    const dependencies: string[] = []
 
-  let matches = dependencyPattern.exec(template)
-  const dependencies: string[] = []
+    if (matches === null) {
+    } else {
+      while (matches) {
+        const matchFilename = matches[0].match(/(['"`])[^'"`]*\1/)
 
-  if (matches === null) {
-  } else {
-    while (matches) {
-      const matchFilename = matches[0].match(/(['"`])[^'"`]*\1/)
+        let filename = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '').replace(/^\//, '') : null
 
-      let filename = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '').replace(/^\//, '') : null
+        if (filename !== null) {
+          if (!filename.endsWith('.ejs')) {
+            filename += '.ejs'
+          }
 
-      if (filename !== null) {
-        if (!filename.endsWith('.ejs')) {
-          filename += '.ejs'
+          if (!dependencies.includes(filename)) {
+            dependencies.push(resolve(ejsOptions.root ?? '', filename))
+          }
         }
 
-        if (!dependencies.includes(filename)) {
-          dependencies.push(filename)
-        }
+        matches = dependencyPattern.exec(content)
       }
-
-      matches = dependencyPattern.exec(template)
     }
-  }
 
-  callback(null, template, sourceMap, additionalData)
+    dependencies.forEach((dependency) => {
+      this.addDependency(dependency)
+    })
+
+    callback(null, template, sourceMap, additionalData)
+  } catch (error) {
+    callback(error)
+  }
 }
