@@ -23,12 +23,28 @@ export default async function ejsLoader(
 
   const dependencyPattern = /<%[_\W]?\s*include\(.*\)\s*[_\W]?%>/g
 
-  const matches = dependencyPattern.exec(template)
+  let matches = dependencyPattern.exec(template)
   const dependencies: string[] = []
 
   if (matches === null) {
   } else {
-    matches.forEach((match) => {})
+    while (matches) {
+      const matchFilename = matches[0].match(/(['"`])[^'"`]*\1/)
+
+      let filename = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '').replace(/^\//, '') : null
+
+      if (filename !== null) {
+        if (!filename.endsWith('.ejs')) {
+          filename += '.ejs'
+        }
+
+        if (!dependencies.includes(filename)) {
+          dependencies.push(filename)
+        }
+      }
+
+      matches = dependencyPattern.exec(template)
+    }
   }
 
   callback(null, template, sourceMap, additionalData)
