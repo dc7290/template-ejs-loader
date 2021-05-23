@@ -1,8 +1,4 @@
 {
-  "name": "ejs-loader",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
   "scripts": {
     "build": "webpack",
     "start": "webpack serve --open"
