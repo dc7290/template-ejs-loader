@@ -2,12 +2,6 @@
   "name": "template-ejs-loader",
   "version": "0.1.0",
   "description": "ejs-loader with webpack5 support. Chain it to html-loader and use it with html-webpack-plugin.",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dc7290/template-ejs-loader"
-  },
-  "author": "dc7290",
   "keywords": [
     "ejs",
     "loader",
@@ -17,7 +11,20 @@
     "template",
     "require"
   ],
+  "homepage": "https://github.com/dc7290/template-ejs-loader#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dc7290/template-ejs-loader"
+  },
+  "license": "MIT",
+  "author": "dc7290",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/",
+    "example/",
+    "src/"
+  ],
   "scripts": {
     "build": "tsc"
   },

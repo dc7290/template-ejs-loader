@@ -5,6 +5,7 @@
 
 [EJS](http://www.embeddedjs.com/) (Embeded JavaScript) loader for [Webpack](http://webpack.js.org). It converts EJS templates to plain HTML using the [EJS npm package](https://www.npmjs.com/package/ejs).
 
+- [features](#features)
 - [installation](#installation)
 - [usage](#usage)
 - [importing partials](#importing-partials)
@@ -12,6 +13,12 @@
 - [tags](#tags)
 - [options](#options)
 - [more info](#more-info)
+
+## <a name="features"></a>Features
+
+- webpack5 support
+- Import `.js`,`.json` and `node modules` using `require
+- All files can be passed values.
 
 ## <a name="installation"></a> Instalation
 
@@ -50,10 +57,10 @@ module.exports = {
 
 ## Options
 
-ejs でサポートされている値を設定できます。
-値については[こちら](https://www.npmjs.com/package/ejs#options)を参照ください。
+You can set the values supported by ejs.
+See [here](https://www.npmjs.com/package/ejs#options) for the values.
 
-以下は、独自の設定オプションになります
+The following are your own configuration options.
 | Name | Type | Default | Description |
 | :-----------------------: | :--------: | :-----: | :-------------------------------- |
 | **[`data`](#data)** | `{Object}` | `{}` | |
@@ -63,8 +70,8 @@ ejs でサポートされている値を設定できます。
 Type: `Object`
 Default: `{}`
 
-全ての ejs ファイルに同一の値を渡したい時に使用します。
-個別で渡したいパラメーターは`html-webpack-plugin`の`templateParameters`を使用してください。
+Use this if you want to pass the same value to all ejs files.
+Use `templateParameters` in `html-webpack-plugin` for parameters you want to pass individually.
 
 ## <a name="importing-partials"></a> Importing partials
 
