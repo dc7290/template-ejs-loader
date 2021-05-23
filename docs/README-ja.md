@@ -30,7 +30,7 @@ npm i -D template-ejs-loader
 
 **NOTE:** template-ejs-loader を [html-loader](https://www.npmjs.com/package/html-loader) のような html ローダーと連鎖させ、[html-webpack-plugin](https://www.npmjs.com/package/html-webpack-plugin) のようなテンプレートプラグインを使用する必要があります。これらをインストールするには、`npm i -D html-loader html-webpack-plugin`を実行してください。
 
-webpack.config.jsに以下のルールを追加します。
+`webpack config file`に以下のルールを追加します。
 
 ```js
 const HtmlWebpackPlugin = require('html-webpack-plugin')
