@@ -11,9 +11,7 @@ module.exports = {
     filename: 'assets/js/index.js',
   },
   devServer: {
-    stats: {
-      children: true,
-    },
+    stats: 'errors-warnings',
     contentBase: './dist',
   },
   module: {
@@ -26,6 +24,9 @@ module.exports = {
             loader: path.resolve(__dirname, '../lib/index.js'),
             options: {
               root: './src/ejs',
+              data: {
+                foo: 'foo',
+              },
             },
           },
         ],
