@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/ejs": "^3.0.6",
-    "@types/node": "12",
+    "@types/node": "14",
     "ejs": "^3.1.6",
     "webpack": "^5.37.1"
   },
