@@ -1,8 +1,23 @@
 {
-  "name": "ejs-loader",
+  "name": "template-ejs-loader",
   "version": "0.1.0",
-  "main": "index.js",
+  "description": "ejs-loader with webpack5 support. Chain it to html-loader and use it with html-webpack-plugin.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dc7290/template-ejs-loader"
+  },
+  "author": "dc7290",
+  "keywords": [
+    "ejs",
+    "loader",
+    "html",
+    "webpack",
+    "webpack5",
+    "template",
+    "require"
+  ],
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc"
   },
@@ -11,5 +26,9 @@
     "@types/node": "12",
     "ejs": "^3.1.6",
     "webpack": "^5.37.1"
+  },
+  "peerDependencies": {
+    "ejs": "^3.*",
+    "webpack": "^5.*"
   }
 }

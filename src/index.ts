@@ -4,7 +4,7 @@ import { resolve } from 'path'
 import { compile, Options, Data } from 'ejs'
 import { LoaderContext } from 'webpack'
 
-import { AdditionalData, SourceMap } from './types'
+import type { AdditionalData, SourceMap } from './types'
 
 type EjsLoaderContext = LoaderContext<Options & { data?: Data }>
 
@@ -66,6 +66,8 @@ const requireFunction = (context: EjsLoaderContext, requestSource: string) => {
     return content
   }
 }
+
+export type { SourceMap, AdditionalData }
 
 export default async function ejsLoader(
   this: EjsLoaderContext,
