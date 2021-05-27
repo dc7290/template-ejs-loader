@@ -21,10 +21,10 @@ test('includes ejs partials and can pass ejs options', async () => {
   expect(ejsOutput).toBe(htmlOutput)
 })
 
-// test('does not remove require statements outside ejs tags', async () => {
-//   const [ejsOutput, htmlOutput] = await getOutputs('outside-ejs');
-//   expect(ejsOutput).toBe(htmlOutput);
-// });
+test('does not remove require statements outside ejs tags', async () => {
+  const [ejsOutput, htmlOutput] = await getOutputs('outside-ejs')
+  expect(ejsOutput).toBe(htmlOutput)
+})
 
 // test('includes json files', async () => {
 //   const [ejsOutput, htmlOutput] = await getOutputs('include-json');
