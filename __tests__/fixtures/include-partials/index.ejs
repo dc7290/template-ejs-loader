@@ -1,0 +1,26 @@
+<%
+const meta = {
+  title: 'Document',
+  description: 'sample description: This is dc7290, the creator of this library. Thank you for reading the test code. If you find anything strange, please send me an issue!'
+}
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('/partials/meta', { meta }) %>
+</head>
+<body>
+  <%- include('/partials/nested-partial') %>
+
+  <main>
+    <% for(let i = 0; i < 10; i++) { %>
+      <%- include('/partials/section', {
+        content: `Section: ${i + 1}`
+      }) %>
+    <% } %>
+  </main>
+
+  <%- include('/partials/footer') %>
+</body>
+</html>
