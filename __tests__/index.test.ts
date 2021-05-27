@@ -35,3 +35,8 @@ test('includes common js modules', async () => {
   const [ejsOutput, htmlOutput] = await getOutputs('include-common-js')
   expect(ejsOutput).toBe(htmlOutput)
 })
+
+test('includes node modules', async () => {
+  const [ejsOutput, htmlOutput] = await getOutputs('include-node-modules')
+  expect(ejsOutput).toBe(htmlOutput)
+})
