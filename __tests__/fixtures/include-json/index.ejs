@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+    <% const personalData = require('./data.json') %>
+    <dl>
+      <dt>Name</dt>
+      <dd><%= personalData.name %></dd>
+      <dt>Age</dt>
+      <dd><%= personalData.age %></dd>
+      <dt>Residence</dt>
+      <dd><%= personalData.residence %></dd>
+    </dl>
+</body>
+</html>

@@ -62,8 +62,7 @@ const requireFunction = (context: EjsLoaderContext, requestSource: string) => {
   } else if (requestSource.endsWith('.js')) {
     return require(resolve(context.context, requestSource))
   } else if (requestSource.endsWith('.json')) {
-    const content = JSON.parse(readFileSync(resolve(context.context, requestSource), 'utf8'))
-    return content
+    return JSON.parse(readFileSync(resolve(context.context, requestSource), 'utf8'))
   }
 }
 
