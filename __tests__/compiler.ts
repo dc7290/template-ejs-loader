@@ -4,7 +4,9 @@ import { Data, Options } from 'ejs'
 import { createFsFromVolume, Volume } from 'memfs'
 import webpack, { Stats } from 'webpack'
 
-export default (fixture: string, options: Options & { data?: Data } = {}): Promise<Stats> => {
+export type EjsOptinos = Options & { data?: Data }
+
+export default (fixture: string, options: EjsOptinos = {}): Promise<Stats> => {
   const compiler = webpack({
     context: __dirname,
     entry: fixture,

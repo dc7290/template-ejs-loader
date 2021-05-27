@@ -1,6 +1,7 @@
-import compiler from './compiler'
 import { readFile as _readFile } from 'fs'
 import { promisify } from 'util'
+
+import compiler, { EjsOptinos } from './compiler'
 
 const readFilePromise = promisify(_readFile)
 
@@ -14,8 +15,8 @@ export const minify = (str: string) =>
     .replace(/\s+(\<)/g, '$1') // remove whitespace before html tags
     .replace(/(\r|\n)/g, '') // remove new lines
 
-export const getCompiledOutput = async (fixturePath: string) => {
-  const output = (await compiler(fixturePath)).toJson({ source: true }).modules[0].source
+export const getCompiledOutput = async (fixturePath: string, options: EjsOptinos = {}) => {
+  const output = (await compiler(fixturePath, options)).toJson({ source: true }).modules[0].source
 
   if (typeof output !== 'string') {
     throw Error('output is Buffer')
