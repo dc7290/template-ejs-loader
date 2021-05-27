@@ -3,6 +3,8 @@
 [![npm](https://img.shields.io/npm/v/template-ejs-loader.svg)](https://www.npmjs.com/package/template-ejs-loader)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/dc7290/template-ejs-loader/blob/main/LICENSE)
 
+[日本語](https://github.com/dc7290/template-ejs-loader/blob/main/docs/README-ja.md)
+
 [EJS](http://www.embeddedjs.com/) (Embeded JavaScript) loader for [Webpack](http://webpack.js.org). It converts EJS templates to plain HTML using the [EJS npm package](https://www.npmjs.com/package/ejs).
 
 - [features](#features)
