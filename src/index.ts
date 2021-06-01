@@ -105,18 +105,18 @@ export default async function ejsLoader(
       this.addDependency(dependency)
     })
 
-    console.log(this.loaders)
+    console.log(this.resource)
 
-    // callback(
-    //   null,
-    //   `
-    //   module.exports = function (templateParams) { with(templateParams) {
-    //     return (${template})();
-    //   }}
-    // `,
-    //   sourceMap,
-    //   additionalData
-    // )
+    console.log(
+      this._compiler?.options.plugins.filter(
+        (plugin) =>
+          typeof plugin === 'object' &&
+          plugin.options &&
+          plugin.options.template &&
+          plugin.options.template === this.resource
+      )
+    )
+
     callback(null, template, sourceMap, additionalData)
   } catch (error) {
     callback(error)
