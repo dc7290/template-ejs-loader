@@ -17,11 +17,21 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.html$/i,
+        use: ['html-loader'],
+      },
+      {
         test: /\.ejs$/i,
         use: [
+          {
+            loader: require.resolve('html-webpack-plugin/lib/loader'),
+            options: {
+              force: true,
+            },
+          },
           'html-loader',
           {
-            loader: 'template-ejs-loader',
+            loader: path.resolve(__dirname, '../lib/index.js'),
             options: {
               root: './src/ejs',
               data: {
@@ -35,13 +45,22 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    // new HtmlWebpackPlugin({
+    //   filename: 'index.html',
+    //   template: path.resolve(__dirname, './src/ejs/index.ejs'),
+    // }),
+    // new HtmlWebpackPlugin({
+    //   filename: 'about/index.html',
+    //   template: path.resolve(__dirname, './src/ejs/about/index.ejs'),
+    // }),
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.resolve(__dirname, './src/ejs/index.ejs'),
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'about/index.html',
-      template: path.resolve(__dirname, './src/ejs/about/index.ejs'),
+      filename: 'test/index.html',
+      template: path.resolve(__dirname, './src/ejs/test/index.ejs'),
+      templateParameters: {
+        data: {
+          foo: 'foo',
+        },
+      },
     }),
   ],
   stats: true,

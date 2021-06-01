@@ -105,6 +105,18 @@ export default async function ejsLoader(
       this.addDependency(dependency)
     })
 
+    console.log(this.loaders)
+
+    // callback(
+    //   null,
+    //   `
+    //   module.exports = function (templateParams) { with(templateParams) {
+    //     return (${template})();
+    //   }}
+    // `,
+    //   sourceMap,
+    //   additionalData
+    // )
     callback(null, template, sourceMap, additionalData)
   } catch (error) {
     callback(error)
