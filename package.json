@@ -22,10 +22,6 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib/",
-    "example/src/",
-    "example/package.json",
-    "example/webpack.config.js",
-    "example/yarn.lock",
     "src/"
   ],
   "scripts": {
