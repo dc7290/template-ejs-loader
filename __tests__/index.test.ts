@@ -42,18 +42,23 @@ test('includes node modules', async () => {
 })
 
 test('can pass html-webpack-plugin parameters', async () => {
-  const source = await compiler(
-    path.resolve(__dirname, './fixtures/include-htmlWebpackPluginParameters/index.js'),
-    {},
-    true
+  const source = (
+    await compiler(path.resolve(__dirname, './fixtures/include-htmlWebpackPluginParameters/index.js'), {}, true)
   )
-  console.log(
-    source
-      .toJson({ source: true })
-      .children[0].modules.filter(
-        (module) =>
-          typeof module.id === 'string' &&
-          module.id.endsWith('./fixtures/include-htmlWebpackPluginParameters/index.ejs')
-      )[0]
+    .toJson({ source: true })
+    .children[0].modules.filter(
+      (module) =>
+        typeof module.id === 'string' && module.id.endsWith('./fixtures/include-htmlWebpackPluginParameters/index.ejs')
+    )[0].source
+
+  if (typeof source !== 'string') {
+    throw Error('ejs output is Buffer')
+  }
+
+  const ejsOutput = eval(source.replace(/export default code;/, 'module.exports = code'))
+  const htmlOutput = await readFile(
+    path.resolve(__dirname, './fixtures/include-htmlWebpackPluginParameters/index.html')
   )
+
+  expect(ejsOutput).toBe(htmlOutput)
 })
