@@ -23,12 +23,6 @@ module.exports = {
       {
         test: /\.ejs$/i,
         use: [
-          {
-            loader: require.resolve('html-webpack-plugin/lib/loader'),
-            options: {
-              force: true,
-            },
-          },
           'html-loader',
           {
             loader: path.resolve(__dirname, '../lib/index.js'),
@@ -45,22 +39,13 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    // new HtmlWebpackPlugin({
-    //   filename: 'index.html',
-    //   template: path.resolve(__dirname, './src/ejs/index.ejs'),
-    // }),
-    // new HtmlWebpackPlugin({
-    //   filename: 'about/index.html',
-    //   template: path.resolve(__dirname, './src/ejs/about/index.ejs'),
-    // }),
     new HtmlWebpackPlugin({
-      filename: 'test/index.html',
-      template: path.resolve(__dirname, './src/ejs/test/index.ejs'),
-      templateParameters: {
-        data: {
-          foo: 'foo',
-        },
-      },
+      filename: 'index.html',
+      template: path.resolve(__dirname, './src/ejs/index.ejs'),
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'about/index.html',
+      template: path.resolve(__dirname, './src/ejs/about/index.ejs'),
     }),
   ],
   stats: true,

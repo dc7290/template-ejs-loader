@@ -88,11 +88,34 @@ export default async function ejsLoader(
     callback(Error('Do not set "require" in the loader options'))
   }
 
+  const currentHtmlWebpackPlugin = this._compiler?.options.plugins.filter(
+    (plugin) =>
+      typeof plugin === 'object' &&
+      plugin.options &&
+      plugin.options.template &&
+      plugin.options.template === this.resource
+  )[0]
+  const templateParameters = {}
+  if (this._compiler === undefined) {
+    return
+  }
+  if (
+    typeof currentHtmlWebpackPlugin === 'object' &&
+    typeof currentHtmlWebpackPlugin.options.templateParameters !== 'function'
+  ) {
+    Object.assign(templateParameters, {
+      htmlWebpackPlugin: {
+        options: currentHtmlWebpackPlugin.options.templateParameters,
+      },
+    })
+  }
+
   const parameter = Object.assign(
     {
       require: (source: string) => requireFunction(this, source),
     },
-    loaderOptions.data
+    loaderOptions.data,
+    templateParameters
   )
 
   try {
@@ -104,18 +127,6 @@ export default async function ejsLoader(
     ejsDependencies.concat(requireDependencies).forEach((dependency) => {
       this.addDependency(dependency)
     })
-
-    console.log(this.resource)
-
-    console.log(
-      this._compiler?.options.plugins.filter(
-        (plugin) =>
-          typeof plugin === 'object' &&
-          plugin.options &&
-          plugin.options.template &&
-          plugin.options.template === this.resource
-      )
-    )
 
     callback(null, template, sourceMap, additionalData)
   } catch (error) {
