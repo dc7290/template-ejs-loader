@@ -1,6 +1,6 @@
 {
   "name": "template-ejs-loader",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "ejs-loader with webpack5 support. Chain it to html-loader and use it with html-webpack-plugin.",
   "keywords": [
     "ejs",
@@ -22,10 +22,6 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib/",
-    "example/src/",
-    "example/package.json",
-    "example/webpack.config.js",
-    "example/yarn.lock",
     "src/"
   ],
   "scripts": {
@@ -42,6 +38,7 @@
     "babel-jest": "^26.6.3",
     "ejs": "^3.1.6",
     "html-loader": "^2.1.2",
+    "html-webpack-plugin": "^5.3.1",
     "jest": "^26.6.3",
     "memfs": "^3.2.2",
     "ts-node": "^10.0.0",

@@ -21,7 +21,7 @@ module.exports = {
         use: [
           'html-loader',
           {
-            loader: 'template-ejs-loader',
+            loader: path.resolve(__dirname, '../lib/index.js'),
             options: {
               root: './src/ejs',
               data: {

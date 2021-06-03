@@ -88,11 +88,31 @@ export default async function ejsLoader(
     callback(Error('Do not set "require" in the loader options'))
   }
 
+  const currentHtmlWebpackPlugin = this._compiler?.options.plugins.filter(
+    (plugin) =>
+      typeof plugin === 'object' &&
+      plugin.options &&
+      plugin.options.template &&
+      plugin.options.template === this.resource
+  )[0]
+  const templateParameters = {}
+  if (
+    typeof currentHtmlWebpackPlugin === 'object' &&
+    typeof currentHtmlWebpackPlugin.options.templateParameters !== 'function'
+  ) {
+    Object.assign(templateParameters, {
+      htmlWebpackPlugin: {
+        options: currentHtmlWebpackPlugin.options.templateParameters,
+      },
+    })
+  }
+
   const parameter = Object.assign(
     {
       require: (source: string) => requireFunction(this, source),
     },
-    loaderOptions.data
+    loaderOptions.data,
+    templateParameters
   )
 
   try {

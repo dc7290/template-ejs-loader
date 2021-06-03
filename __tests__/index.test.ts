@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { EjsOptinos } from './compiler'
+import compiler, { EjsOptinos } from './compiler'
 import { getCompiledOutput, readFile } from './utils'
 
 const getOutputs = (folder: string, options: EjsOptinos = {}) =>
@@ -38,5 +38,27 @@ test('includes common js modules', async () => {
 
 test('includes node modules', async () => {
   const [ejsOutput, htmlOutput] = await getOutputs('include-node-modules')
+  expect(ejsOutput).toBe(htmlOutput)
+})
+
+test('can pass html-webpack-plugin parameters', async () => {
+  const source = (
+    await compiler(path.resolve(__dirname, './fixtures/include-htmlWebpackPluginParameters/index.js'), {}, true)
+  )
+    .toJson({ source: true })
+    .children[0].modules.filter(
+      (module) =>
+        typeof module.id === 'string' && module.id.endsWith('./fixtures/include-htmlWebpackPluginParameters/index.ejs')
+    )[0].source
+
+  if (typeof source !== 'string') {
+    throw Error('ejs output is Buffer')
+  }
+
+  const ejsOutput = eval(source.replace(/export default code;/, 'module.exports = code'))
+  const htmlOutput = await readFile(
+    path.resolve(__dirname, './fixtures/include-htmlWebpackPluginParameters/index.html')
+  )
+
   expect(ejsOutput).toBe(htmlOutput)
 })
