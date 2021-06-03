@@ -96,9 +96,6 @@ export default async function ejsLoader(
       plugin.options.template === this.resource
   )[0]
   const templateParameters = {}
-  if (this._compiler === undefined) {
-    return
-  }
   if (
     typeof currentHtmlWebpackPlugin === 'object' &&
     typeof currentHtmlWebpackPlugin.options.templateParameters !== 'function'
