@@ -12,8 +12,8 @@
 - [usage](#usage)
 - [importing partials](#importing-partials)
 - [importing js/json files](#importing-files)
-- [tags](#tags)
-- [options](#options)
+- [Importing node modules](#importing-modules)
+- [Passing individual values](#passing-individual-values)
 - [more info](#more-info)
 
 ## <a name="features"></a>Features
@@ -73,7 +73,7 @@ Type: `Object`
 Default: `{}`
 
 Use this if you want to pass the same value to all ejs files.
-Use `templateParameters` in `html-webpack-plugin` for parameters you want to pass individually.
+If you want to pass individual values, see [here](#passing-individual-values).
 
 ## <a name="importing-partials"></a> Importing partials
 
@@ -164,6 +164,34 @@ module.exports = {
 
   <!-- ... -->
 </html>
+```
+
+## <a name="passing-individual-values"></a> Passing individual values
+
+`webpack.config.js`
+
+```javascript
+module.exports = {
+  ~~~
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: `!${require.resolve('html-loader')}!${path.resolve(
+        __dirname,
+        '../lib/index.js'
+      )}?${queryString.stringify({
+        // Use the query as an option to pass to the loader
+        root: './src/ejs',
+        data: JSON.stringify({
+          foo: 'bar',
+        }),
+      })}!${path.resolve(__dirname, './src/ejs/index.ejs')}`,
+    }),
+  ]
+
+  ~~~
+}
 ```
 
 ## <a name="more-info"></a> More info

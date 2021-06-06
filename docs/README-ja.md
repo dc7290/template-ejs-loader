@@ -10,8 +10,8 @@
 - [usage](#usage)
 - [importing partials](#importing-partials)
 - [importing js/json files](#importing-files)
-- [tags](#tags)
-- [options](#options)
+- [Importing node modules](#importing-modules)
+- [Passing individual values](#passing-individual-values)
 - [more info](#more-info)
 
 ## <a name="features"></a>Features
@@ -71,7 +71,7 @@ Type: `Object`
 Default: `{}`
 
 全ての ejs ファイルに同一の値を渡したい時に使用します。
-個別で渡したいパラメーターは`html-webpack-plugin`の`templateParameters`を使用してください。
+個別に値を渡したい時は[こちら](#passing-individual-values)を参照ください。
 
 ## <a name="importing-partials"></a> Importing partials
 
@@ -162,6 +162,34 @@ module.exports = {
 
   <!-- ... -->
 </html>
+```
+
+## <a name="passing-individual-values"></a> Passing individual values
+
+`webpack.config.js`
+
+```javascript
+module.exports = {
+  ~~~
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: `!${require.resolve('html-loader')}!${path.resolve(
+        __dirname,
+        '../lib/index.js'
+      )}?${queryString.stringify({
+        // ローダーに渡すオプションとして、クエリを使う
+        root: './src/ejs',
+        data: JSON.stringify({
+          foo: 'bar',
+        }),
+      })}!${path.resolve(__dirname, './src/ejs/index.ejs')}`,
+    }),
+  ]
+
+  ~~~
+}
 ```
 
 ## <a name="more-info"></a> More info

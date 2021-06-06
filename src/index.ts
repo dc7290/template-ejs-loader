@@ -6,7 +6,7 @@ import { LoaderContext } from 'webpack'
 
 import type { AdditionalData, SourceMap } from './types'
 
-type EjsLoaderContext = LoaderContext<Options & { data?: Data }>
+type EjsLoaderContext = LoaderContext<Options & { data?: Data | string }>
 
 const getIncludeEjsDependencies = (content: string, options: Options) => {
   const dependencyPattern = /<%[_\W]?\s*include\(.*\)\s*[_\W]?%>/g
@@ -77,6 +77,9 @@ export default async function ejsLoader(
   const callback = this.async()
 
   const loaderOptions = this.getOptions()
+  if (loaderOptions.data !== undefined && typeof loaderOptions.data === 'string') {
+    Object.assign(loaderOptions, { data: JSON.parse(loaderOptions.data) })
+  }
   const ejsOptions = Object.assign(
     {
       filename: this.resourcePath,
