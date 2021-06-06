@@ -175,7 +175,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: `!${require.resolve('html-loader')}!${path.resolve(
+      template: `!${require.resolve('html-loader')}??ruleSet[1].rules[0].use[0]!${path.resolve(
         __dirname,
         '../lib/index.js'
       )}?${queryString.stringify({
