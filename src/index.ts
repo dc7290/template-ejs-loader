@@ -25,7 +25,7 @@ const getIncludeEjsDependencies = (content: string, options: Options) => {
       }
 
       if (!dependencies.includes(filename)) {
-        dependencies.push(resolve(options.root ?? '', filename))
+        dependencies.push(/^\//.test(filename) ? resolve(options.root ?? '', filename) : resolve(filename))
       }
     }
 
