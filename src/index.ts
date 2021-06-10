@@ -17,7 +17,7 @@ const getIncludeEjsDependencies = (context: EjsLoaderContext, content: string, o
   while (matches) {
     const matchFilename = matches[0].match(/(['"`])[^'"`]*\1/)
 
-    let filename = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '').replace(/^\//, '') : null
+    let filename = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '') : null
 
     if (filename !== null) {
       if (!filename.endsWith('.ejs')) {
@@ -26,7 +26,9 @@ const getIncludeEjsDependencies = (context: EjsLoaderContext, content: string, o
 
       if (!dependencies.includes(filename)) {
         dependencies.push(
-          /^\//.test(filename) ? resolve(options.root ?? '', filename) : resolve(context.context, filename)
+          /^\//.test(filename)
+            ? resolve(options.root ?? '', filename.replace(/^\//, ''))
+            : resolve(context.context, filename)
         )
       }
     }
