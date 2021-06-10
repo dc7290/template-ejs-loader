@@ -8,7 +8,7 @@ import type { AdditionalData, SourceMap } from './types'
 
 type EjsLoaderContext = LoaderContext<Options & { data?: Data | string }>
 
-const getIncludeEjsDependencies = (content: string, options: Options) => {
+const getIncludeEjsDependencies = (context: EjsLoaderContext, content: string, options: Options) => {
   const dependencyPattern = /<%[_\W]?\s*include\([^%]*\)\s*[_\W]?%>/g
 
   let matches = dependencyPattern.exec(content)
@@ -25,7 +25,9 @@ const getIncludeEjsDependencies = (content: string, options: Options) => {
       }
 
       if (!dependencies.includes(filename)) {
-        dependencies.push(/^\//.test(filename) ? resolve(options.root ?? '', filename) : resolve(filename))
+        dependencies.push(
+          /^\//.test(filename) ? resolve(options.root ?? '', filename) : resolve(context.context, filename)
+        )
       }
     }
 
@@ -121,7 +123,7 @@ export default async function ejsLoader(
   try {
     const template = await compile(content, ejsOptions)(parameter)
 
-    const ejsDependencies = getIncludeEjsDependencies(content, ejsOptions)
+    const ejsDependencies = getIncludeEjsDependencies(this, content, ejsOptions)
     const requireDependencies = getRequireDependencies(this, content)
 
     ejsDependencies.concat(requireDependencies).forEach((dependency) => {
