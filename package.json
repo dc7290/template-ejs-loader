@@ -1,6 +1,6 @@
 {
   "name": "template-ejs-loader",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "ejs-loader with webpack5 support. Chain it to html-loader and use it with html-webpack-plugin.",
   "keywords": [
     "ejs",
