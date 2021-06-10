@@ -9,7 +9,7 @@ import type { AdditionalData, SourceMap } from './types'
 type EjsLoaderContext = LoaderContext<Options & { data?: Data | string }>
 
 const getIncludeEjsDependencies = (content: string, options: Options) => {
-  const dependencyPattern = /<%[_\W]?\s*include\(.*\)\s*[_\W]?%>/g
+  const dependencyPattern = /<%[_\W]?\s*include\([^]*\)\s*[_\W]?%>/g
 
   let matches = dependencyPattern.exec(content)
   const dependencies: string[] = []
