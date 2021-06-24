@@ -40,3 +40,8 @@ test('includes node modules', async () => {
   const [ejsOutput, htmlOutput] = await getOutputs('include-node-modules')
   expect(ejsOutput).toBe(htmlOutput)
 })
+
+test('does the path alias work', async () => {
+  const [ejsOutput, htmlOutput] = await getOutputs('path-alias')
+  expect(ejsOutput).toBe(htmlOutput)
+})

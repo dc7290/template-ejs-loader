@@ -29,6 +29,11 @@ export default (fixture: string, options: EjsOptinos = {}): Promise<Stats> => {
         },
       ],
     },
+    resolve: {
+      alias: {
+        '~': path.resolve(__dirname, './fixtures'),
+      },
+    },
   })
 
   compiler.outputFileSystem = createFsFromVolume(new Volume())

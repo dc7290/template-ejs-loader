@@ -60,13 +60,13 @@ const getRequireDependencies = (context: EjsLoaderContext, content: string) => {
   return dependencies
 }
 
-const requireFunction = (context: EjsLoaderContext, requestSource: string) => {
-  if (requestSource.match(/^[./]/) === null) {
-    return require(resolve(context.rootContext, 'node_modules', requestSource))
-  } else if (requestSource.endsWith('.js')) {
-    return require(resolve(context.context, requestSource))
-  } else if (requestSource.endsWith('.json')) {
-    return JSON.parse(readFileSync(resolve(context.context, requestSource), 'utf8'))
+const requireFunction = async (context: EjsLoaderContext, requestSource: string) => {
+  if (requestSource.endsWith('.json')) {
+    const result = await context.getResolve()(context.context, requestSource)
+    return JSON.parse(readFileSync(result, 'utf8'))
+  } else {
+    const result = await context.getResolve()(context.context, requestSource)
+    return require(result)
   }
 }
 
