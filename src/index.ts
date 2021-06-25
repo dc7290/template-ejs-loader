@@ -39,35 +39,33 @@ const getIncludeEjsDependencies = (context: EjsLoaderContext, content: string, o
   return dependencies
 }
 
-const getRequireDependencies = (context: EjsLoaderContext, content: string) => {
-  const dependencyPattern = /<%[_\W]?.*require\(.*\).*[_\W]?%>/g
-
-  let matches = dependencyPattern.exec(content)
-  const dependencies: string[] = []
-
-  while (matches) {
-    const matchFilename = matches[0].match(/(['"`])[^'"`]*\1/)
-
-    let filename = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '') : null
-
-    if (filename !== null && filename.match(/^[./]/) !== null && !dependencies.includes(filename)) {
-      dependencies.push(resolve(context.context, filename))
-    }
-
-    matches = dependencyPattern.exec(content)
+const requireFunction = (requestPath: string) => {
+  if (requestPath.endsWith('.json')) {
+    return JSON.parse(readFileSync(requestPath, 'utf-8'))
+  } else {
+    return require(requestPath)
   }
-
-  return dependencies
 }
 
-const requireFunction = async (context: EjsLoaderContext, requestSource: string) => {
-  if (requestSource.endsWith('.json')) {
-    const result = await context.getResolve()(context.context, requestSource)
-    return JSON.parse(readFileSync(result, 'utf8'))
-  } else {
-    const result = await context.getResolve()(context.context, requestSource)
-    return require(result)
+const resolveRequirePaths = async (context: EjsLoaderContext, content: string) => {
+  const requirePattern = /<%[_\W]?.*(require\(.*\)).*[_\W]?%>/g
+  let resultContent = content
+
+  let matches = requirePattern.exec(content)
+
+  while (matches) {
+    const matchFilename = matches[1].match(/(['"`])[^'"`]*\1/)
+    const requestSource = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '') : null
+
+    if (requestSource !== null) {
+      const result = await context.getResolve()(context.context, requestSource)
+      resultContent = resultContent.replace(matches[1], `require('${result}')`)
+    }
+
+    matches = requirePattern.exec(content)
   }
+
+  return resultContent
 }
 
 export type { SourceMap, AdditionalData }
@@ -116,19 +114,19 @@ export default async function ejsLoader(
 
   const parameter = Object.assign(
     {
-      require: (source: string) => requireFunction(this, source),
+      require: (source: string) => requireFunction(source),
     },
     loaderOptions.data,
     templateParameters
   )
 
   try {
-    const template = await compile(content, ejsOptions)(parameter)
+    const resolveContent = await resolveRequirePaths(this, content)
+    const template = await compile(resolveContent, ejsOptions)(parameter)
 
     const ejsDependencies = getIncludeEjsDependencies(this, content, ejsOptions)
-    const requireDependencies = getRequireDependencies(this, content)
 
-    ejsDependencies.concat(requireDependencies).forEach((dependency) => {
+    ejsDependencies.forEach((dependency) => {
       this.addDependency(dependency)
     })
 
