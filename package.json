@@ -1,6 +1,6 @@
 {
   "name": "template-ejs-loader",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "description": "ejs-loader with webpack5 support. Chain it to html-loader and use it with html-webpack-plugin.",
   "keywords": [
     "ejs",
@@ -32,20 +32,20 @@
     "ejs": "^3.1.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.3",
-    "@babel/preset-env": "^7.14.2",
-    "@babel/preset-typescript": "^7.13.0",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-typescript": "^7.14.5",
     "@types/ejs": "^3.0.6",
     "@types/jest": "^26.0.23",
-    "@types/node": "14",
+    "@types/node": "15.12.4",
     "babel-jest": "^26.6.3",
     "html-loader": "^2.1.2",
-    "html-webpack-plugin": "^5.3.1",
+    "html-webpack-plugin": "^5.3.2",
     "jest": "^26.6.3",
     "memfs": "^3.2.2",
     "ts-node": "^10.0.0",
-    "typescript": "^4.2.4",
-    "webpack": "^5.37.1"
+    "typescript": "^4.3.4",
+    "webpack": "^5.40.0"
   },
   "peerDependencies": {
     "webpack": "^5.*"
