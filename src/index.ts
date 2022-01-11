@@ -1,38 +1,54 @@
 import { readFileSync } from 'fs'
-import { resolve } from 'path'
+import { resolve,dirname } from 'path'
 
 import { compile, Options, Data } from 'ejs'
 import { LoaderContext } from 'webpack'
 
 import type { AdditionalData, SourceMap } from './types'
-
 type EjsLoaderContext = LoaderContext<Options & { data?: Data | string }>
 
-const getIncludeEjsDependencies = (context: EjsLoaderContext, content: string, options: Options) => {
+const getIncludeEjsDependencies = (context: EjsLoaderContext, content: string, options: Options, nestedDependencyRoot?:string) => {
   const dependencyPattern = /<%[_\W]?\s*include\([^%]*\)\s*[_\W]?%>/g
 
   let matches = dependencyPattern.exec(content)
   const dependencies: string[] = []
 
   while (matches) {
+    // get filename with "" or ''
     const matchFilename = matches[0].match(/(['"`])[^'"`]*\1/)
-
-    let filename = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '') : null
-
+    // get real file name without "" or ''
+    let filename = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '') : null // if filename is not null, then replace ""
+    // if filename is not empty
     if (filename !== null) {
+      // add .ejs if no ext
+      let filePath = '';
+
       if (!filename.endsWith('.ejs')) {
         filename += '.ejs'
       }
-
+      // if dep. exist
       if (!dependencies.includes(filename)) {
-        dependencies.push(
-          /^\//.test(filename)
-            ? resolve(options.root ?? '', filename.replace(/^\//, ''))
-            : resolve(context.context, filename)
-        )
+        // get filepath
+        filePath = /^\//.test(filename)
+        ? resolve(options.root ?? '', filename.replace(/^\//, ''))
+        : resolve(context.context, filename)
+        // update filepath if there is a nestedDependencyRoot parameter
+        if(nestedDependencyRoot){
+          filePath = resolve(nestedDependencyRoot, filename)
+        }
+        dependencies.push(filePath)
+      }
+
+      // then check if there are any nested dependencies inside that dependendency;
+      const fileContent = readFileSync(filePath, 'utf8');
+      let dependencyFolderPath = dirname(filePath);
+      // recursive
+      let nestDependencies = getIncludeEjsDependencies(context,fileContent,options,dependencyFolderPath);
+      if(nestDependencies.length>0){
+        dependencies.push(...nestDependencies);
       }
     }
-
+    // check the content if there are no other dep.
     matches = dependencyPattern.exec(content)
   }
 
