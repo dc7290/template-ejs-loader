@@ -12,3 +12,16 @@ export type AdditionalData = {
   [index: string]: any
   webpackAST: object
 }
+
+export type htmlWebpackPluginTemplateCustomizerConfig = {
+  htmlLoaderOption? :{
+    [key: string]: any
+  },
+  templateEjsLoaderOption?:{
+    root?:string,
+    data:{
+      [key: string]: any
+    }
+  },
+  templatePath?:string
+}

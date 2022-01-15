@@ -168,29 +168,35 @@ module.exports = {
 
 ## <a name="passing-individual-values"></a> Passing individual values
 
+> If you are getting all your `htmlWebpackPlugin` instances generated within a loop, and you want to get indivisual passing values for each `.ejs` template as variables, you can try this :D. (This method is using webapck loader inline mechanic to load every `ejs` file instead, you can also set html-loader/template-ejs-Loader options for each `.ejs` file.)
+
 `webpack.config.js`
 
 ```javascript
+const { htmlWebpackPluginTemplateCustomizer }  = require('template-ejs-loader')
+...
 module.exports = {
-  ~~~
+  ...
 
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: `!${require.resolve('html-loader')}??ruleSet[1].rules[0].use[0]!${path.resolve(
-        __dirname,
-        '../lib/index.js'
-      )}?${queryString.stringify({
-        // Use the query as an option to pass to the loader
-        root: './src/ejs',
-        data: JSON.stringify({
-          foo: 'bar',
-        }),
-      })}!${path.resolve(__dirname, './src/ejs/index.ejs')}`,
+      template: htmlWebpackPluginTemplateCustomizer({
+        htmlLoaderOption:{
+          ... // set individual html-loader option here
+        },
+        templateEjsLoaderOption:{
+          root:'' // set individual template-ejs-loader option here
+          data:{
+            foo:'test' // you can have indivisual data injection for each .ejs file, too. 
+          }
+        },
+        templatePath:'./src/index.ejs' // ejs template path 
+      }),
     }),
   ]
 
-  ~~~
+  ...
 }
 ```
 
