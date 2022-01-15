@@ -168,7 +168,7 @@ module.exports = {
 
 ## <a name="passing-individual-values"></a> Passing individual values
 
-> If you are getting all your `htmlWebpackPlugin` instances generated within a loop, and you want to get indivisual passing values for each `.ejs` template as variables, you can try this :D. (This method is using webapck loader inline mechanic to load every `ejs` file instead, you can also set html-loader/template-ejs-Loader options for each `.ejs` file.)
+> If you are getting all your `htmlWebpackPlugin` instances generated within a loop, and you want to get indivisual passing values for each `.ejs` template as variables, you can try this. (This method is using webapck loader inline mechanic to load every `ejs` file instead, you can also set html-loader/template-ejs-Loader options for each `.ejs` file.)
 
 `webpack.config.js`
 

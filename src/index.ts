@@ -1,10 +1,9 @@
 import { readFileSync } from 'fs'
 import { resolve, dirname } from 'path'
-
 import { compile, Options, Data } from 'ejs'
 import { LoaderContext } from 'webpack'
 
-import type { AdditionalData, SourceMap,htmlWebpackPluginTemplateCustomizerConfig } from './types'
+import type { AdditionalData, SourceMap } from './types'
 type EjsLoaderContext = LoaderContext<Options & { data?: Data | string }>
 
 const getIncludeEjsDependencies = (
@@ -101,7 +100,15 @@ const obj2URLQueryString = (config?:{[prop: string]: any })=>{
   return new URLSearchParams(optionArr).toString()
 }
 
-export type { SourceMap, AdditionalData,htmlWebpackPluginTemplateCustomizerConfig }
+export type htmlWebpackPluginTemplateCustomizerConfig = {
+  htmlLoaderOption? :{
+    [key: string]: any
+  },
+  templateEjsLoaderOption?:Options
+  templatePath?:string
+}
+
+export type { SourceMap, AdditionalData }
 
 export function htmlWebpackPluginTemplateCustomizer(config:htmlWebpackPluginTemplateCustomizerConfig){
   const htmlLoader = `${require.resolve("html-loader")}` // get html-loader entry path
