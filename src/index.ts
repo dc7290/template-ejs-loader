@@ -104,7 +104,7 @@ export type htmlWebpackPluginTemplateCustomizerConfig = {
   htmlLoaderOption? :{
     [key: string]: any
   },
-  templateEjsLoaderOption?:Options
+  templateEjsLoaderOption?: Options & { data?: Data | string }
   templatePath?:string
 }
 
