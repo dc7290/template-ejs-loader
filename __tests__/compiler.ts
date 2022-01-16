@@ -42,8 +42,12 @@ export default (fixture: string, options: EjsOptinos = {}): Promise<Stats> => {
   return new Promise((resolve, reject) => {
     compiler.run((error, stats) => {
       if (error) reject(error)
-      if (stats.hasErrors()) reject(stats.toJson().errors)
+      if (stats === undefined) {
+        reject('stats is undefined')
+        return
+      }
 
+      if (stats.hasErrors()) reject(stats.toJson().errors)
       resolve(stats)
     })
   })
