@@ -92,6 +92,7 @@ const resolveRequirePaths = async (context: EjsLoaderContext, content: string) =
 // Since Node.js had marked the querystring as legacy API in version 14.x, and recommended using URLSearchParams,
 // we should migrate from "querystring" to "URLSearchParams" if we want to get URL query string here.
 // check this: https://www.linkedin.com/pulse/how-migrate-from-querystring-urlsearchparams-nodejs-vladim%C3%ADr-gorej?trk=articles_directory
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const obj2URLQueryString = (config?: { [prop: string]: any }) => {
   if (!config) return ''
   const optionArr: string[][] = []

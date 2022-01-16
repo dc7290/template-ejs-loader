@@ -4,3 +4,9 @@ babel.config.js
 
 # git
 .gitkeep
+
+# test
+/__tests__
+
+# output
+/lib

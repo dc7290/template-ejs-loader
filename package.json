@@ -25,9 +25,9 @@
   ],
   "scripts": {
     "build": "tsc",
-    "lint": "eslint . --cache",
+    "lint": "eslint . --ext .ts --cache",
+    "lint:fix": "eslint . --ext .ts --cache --fix",
     "lint-staged": "lint-staged",
-    "lint:fix": "eslint . --cache --fix",
     "prepare": "husky install",
     "test": "jest",
     "tsc": "tsc"
