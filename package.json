@@ -24,7 +24,7 @@
     "lib/"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc src/*.ts --outDir lib -d",
     "lint": "eslint . --ext .ts --cache",
     "lint:fix": "eslint . --ext .ts --cache --fix",
     "lint-staged": "lint-staged",
