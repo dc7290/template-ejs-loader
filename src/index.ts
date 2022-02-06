@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs'
+
 import { compile, Options, Data } from 'ejs'
 import { LoaderContext } from 'webpack'
 
@@ -88,20 +89,19 @@ export default async function ejsLoader(
     Object.assign(loaderOptions, { data: JSON.parse(loaderOptions.data) })
   }
 
-  const originalIncluder = loaderOptions.includer??null;
-  const customizeIncluder = (originalPath:string, parsedPath:string)=>{
-    this.addDependency(parsedPath);
-    if(originalIncluder!==null){
-      return originalIncluder(originalPath, parsedPath);
-    }
-    else{
+  const originalIncluder = loaderOptions.includer ?? null
+  const customizeIncluder = (originalPath: string, parsedPath: string) => {
+    this.addDependency(parsedPath)
+    if (originalIncluder !== null) {
+      return originalIncluder(originalPath, parsedPath)
+    } else {
       return {
-        filename:parsedPath,
-      };
+        filename: parsedPath,
+      }
     }
   }
 
-  loaderOptions.includer = customizeIncluder;
+  loaderOptions.includer = customizeIncluder
 
   const ejsOptions = Object.assign(
     {
@@ -144,7 +144,6 @@ export default async function ejsLoader(
   try {
     const resolveContent = await resolveRequirePaths(this, content)
     const template = await compile(resolveContent, ejsOptions)(parameter)
-
 
     callback(null, template, sourceMap, additionalData)
   } catch (error) {
