@@ -1,64 +1,10 @@
 import { readFileSync } from 'fs'
-import { resolve, dirname } from 'path'
 
 import { compile, Options, Data } from 'ejs'
 import { LoaderContext } from 'webpack'
 
 import type { AdditionalData, SourceMap } from './types'
 type EjsLoaderContext = LoaderContext<Options & { data?: Data | string }>
-
-const getIncludeEjsDependencies = (
-  context: EjsLoaderContext,
-  content: string,
-  options: Options,
-  nestedDependencyRoot?: string
-) => {
-  const dependencyPattern = /<%[_\W]?\s*include\([^%]*\)\s*[_\W]?%>/g
-
-  let matches = dependencyPattern.exec(content)
-  const dependencies: string[] = []
-
-  while (matches) {
-    // get filename with "" or ''
-    const matchFilename = matches[0].match(/(['"`])[^'"`]*\1/)
-    // get real file name without "" or ''
-    let filename = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '') : null // if filename is not null, then replace ""
-    // if filename is not empty
-    if (filename !== null) {
-      // add .ejs if no ext
-      let filePath = ''
-
-      if (!filename.endsWith('.ejs')) {
-        filename += '.ejs'
-      }
-
-      // get filepath
-      if (nestedDependencyRoot) {
-        filePath = /^\//.test(filename)
-          ? resolve(options.root ?? '', filename.replace(/^\//, ''))
-          : resolve(nestedDependencyRoot, filename)
-      } else {
-        filePath = /^\//.test(filename)
-          ? resolve(options.root ?? '', filename.replace(/^\//, ''))
-          : resolve(context.context, filename)
-      }
-      dependencies.push(filePath)
-
-      // then check if there are any nested dependencies inside that dependendency;
-      const fileContent = readFileSync(filePath, 'utf8')
-      const dependencyFolderPath = dirname(filePath)
-      // recursive
-      const nestDependencies = getIncludeEjsDependencies(context, fileContent, options, dependencyFolderPath)
-      if (nestDependencies.length > 0) {
-        dependencies.push(...nestDependencies)
-      }
-    }
-    // check the content if there are no other dep.
-    matches = dependencyPattern.exec(content)
-  }
-
-  return dependencies
-}
 
 const requireFunction = (requestPath: string) => {
   if (requestPath.endsWith('.json')) {
@@ -142,6 +88,21 @@ export default async function ejsLoader(
   if (loaderOptions.data !== undefined && typeof loaderOptions.data === 'string') {
     Object.assign(loaderOptions, { data: JSON.parse(loaderOptions.data) })
   }
+
+  const originalIncluder = loaderOptions.includer ?? null
+  const customizeIncluder = (originalPath: string, parsedPath: string) => {
+    this.addDependency(parsedPath)
+    if (originalIncluder !== null) {
+      return originalIncluder(originalPath, parsedPath)
+    } else {
+      return {
+        filename: parsedPath,
+      }
+    }
+  }
+
+  loaderOptions.includer = customizeIncluder
+
   const ejsOptions = Object.assign(
     {
       filename: this.resourcePath,
@@ -183,12 +144,6 @@ export default async function ejsLoader(
   try {
     const resolveContent = await resolveRequirePaths(this, content)
     const template = await compile(resolveContent, ejsOptions)(parameter)
-
-    const ejsDependencies = getIncludeEjsDependencies(this, content, ejsOptions)
-
-    ejsDependencies.forEach((dependency) => {
-      this.addDependency(dependency)
-    })
 
     callback(null, template, sourceMap, additionalData)
   } catch (error) {
