@@ -35,18 +35,21 @@ const resolveRequirePaths = async (context: EjsLoaderContext, content: string) =
   return resultContent
 }
 
-// Since Node.js had marked the querystring as legacy API in version 14.x, and recommended using URLSearchParams,
-// we should migrate from "querystring" to "URLSearchParams" if we want to get URL query string here.
-// check this: https://www.linkedin.com/pulse/how-migrate-from-querystring-urlsearchparams-nodejs-vladim%C3%ADr-gorej?trk=articles_directory
+//here we don't use query string to set option anymore , because  type of some option value  is boolean
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const obj2URLQueryString = (config?: { [prop: string]: any }) => {
-  if (!config) return ''
-  const optionArr: string[][] = []
-  Object.keys(config).forEach((key) => {
-    const optionItem = [key, JSON.stringify(config[key])]
-    optionArr.push(optionItem)
+const customStringify = (obj?: { [key: string]: any }, objectName?: string) => {
+  const jsonObj = Object.assign({}, obj)
+  const consoleColor = '\x1b[33m'
+  const consoleColorReset = '\x1b[0m'
+  Object.keys(jsonObj).forEach((o) => {
+    if (typeof jsonObj[o] === 'function') {
+      console.error(
+        `${consoleColor}htmlWebpackPluginTemplateCustomizer => ${objectName}${o} is NOT supported, because wepack loader inline do not support options in which type is function.${consoleColorReset}`
+      )
+      delete jsonObj[o]
+    }
   })
-  return new URLSearchParams(optionArr).toString()
+  return JSON.stringify(jsonObj)
 }
 
 export type htmlWebpackPluginTemplateCustomizerConfig = {
@@ -62,8 +65,8 @@ export function htmlWebpackPluginTemplateCustomizer(config: htmlWebpackPluginTem
   const htmlLoader = `${require.resolve('html-loader')}` // get html-loader entry path
   const templateEjsLoader = `${require.resolve('template-ejs-loader')}` // get template-ejs-loader entry path
 
-  let htmlLoaderOption = `${obj2URLQueryString(config.htmlLoaderOption)}` // get html-loader option
-  let templateEjsLoaderOption = `${obj2URLQueryString(config.templateEjsLoaderOption)}` // get template-ejs-loader option
+  let htmlLoaderOption = `${customStringify(config.htmlLoaderOption, 'htmlLoaderOption : ')}` // get html-loader option
+  let templateEjsLoaderOption = `${customStringify(config.templateEjsLoaderOption, 'templateEjsLoaderOption : ')}` // get template-ejs-loader option
   // Check if option string is empty; (And if it's not, prepend a questionmark '?');
   // This usage is about webpack loader inline, you can check the spec here : https://webpack.js.org/concepts/loaders/#inline
   if (htmlLoaderOption) {
