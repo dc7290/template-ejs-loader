@@ -19,7 +19,7 @@
 ## <a name="features"></a>Features
 
 - webpack5 support
-- Import `.js`,`.json` and `node modules` using `require
+- Import `.js`,`.json` and `node modules` using `require`
 - All files can be passed values.
 
 ## <a name="installation"></a> Instalation
@@ -168,7 +168,9 @@ module.exports = {
 
 ## <a name="passing-individual-values"></a> Passing individual values
 
-If you are getting all your `htmlWebpackPlugin` instances generated within a loop, and you want to get indivisual passing values for each `.ejs` template as variables, you can try this. (This method is using webapck loader inline mechanic to load every `ejs` file instead, you can also set html-loader/template-ejs-Loader options for each `.ejs` file.)
+If you are getting all your `htmlWebpackPlugin` instances generated within a loop, and you want to get indivisual passing values for each `.ejs` template as variables, you can try this. (This method is using `webapck loader inline` mechanic to load every `ejs` file instead, you can also set html-loader/template-ejs-Loader options for each `.ejs` file.)
+
+Unfortunaly, because `webapck loader inline` does not support loader option in which type is function, so basicly the option `preprocessor` of `html-loader` is **NOT** supported here, better try another way if you need to do interpolate things, for example: using `templateEjsLoaderOption.data` to set individual inject value.
 
 `webpack.config.js`
 
@@ -182,16 +184,19 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: htmlWebpackPluginTemplateCustomizer({
-        htmlLoaderOption:{
-          ... // set individual html-loader option here
-        },
-        templateEjsLoaderOption:{
-          root:'' // set individual template-ejs-loader option here
-          data:{
-            foo:'test' // you can have indivisual data injection for each .ejs file, too. 
-          }
-        },
+
         templatePath:'./src/index.ejs' // ejs template path 
+
+        htmlLoaderOption:{
+          // you can set individual html-loader option here.
+          // but preprocessor option is not supported.
+        },
+        templateEjsLoaderOption:{ // set individual template-ejs-loader option here
+          root:'', // this is for example, if not needed, just feel free to delete.
+          data:{ // example, too.
+            foo:'test' // btw, you can have indivisual data injection for each .ejs file using data option
+          }
+        }
       }),
     }),
   ]
