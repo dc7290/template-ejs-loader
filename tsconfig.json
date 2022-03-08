@@ -11,5 +11,5 @@
     "declaration": true,
     "incremental": true
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "__tests__/utils.js", "__tests__/index.test.js"]
 }

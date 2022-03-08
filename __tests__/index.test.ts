@@ -1,47 +1,41 @@
+import fs from 'fs'
 import path from 'path'
+import { readFile } from './utils'
 
-import { EjsOptinos } from './compiler'
-import { getCompiledOutput, readFile } from './utils'
-
-const getOutputs = (folder: string, options: EjsOptinos = {}) =>
+const getOutputs = (folder: string): Promise<[correctOutputs: string, buildOutputs: string]> =>
   Promise.all([
-    getCompiledOutput(`./fixtures/${folder}/index.ejs`, options),
     readFile(path.resolve(__dirname, `./fixtures/${folder}/index.html`)),
+    readFile(path.resolve(__dirname, `./results/${folder}/index.html`)),
   ])
 
-test('takes plain html as input and outputs it', async () => {
-  const [ejsOutput, htmlOutput] = await getOutputs('plain-html')
-  expect(ejsOutput).toBe(htmlOutput)
-})
-
-test('includes ejs partials and can pass ejs options', async () => {
-  const [ejsOutput, htmlOutput] = await getOutputs('include-partials', {
-    root: path.resolve(__dirname, './fixtures/include-partials'),
+describe("It's a webpack build test.", () => {
+  test('takes plain html as input and outputs it', async () => {
+    const [correctOutputs, buildOutputs] = await getOutputs('plain-html')
+    expect(correctOutputs).toBe(buildOutputs)
   })
-  expect(ejsOutput).toBe(htmlOutput)
-})
 
-test('does not remove require statements outside ejs tags', async () => {
-  const [ejsOutput, htmlOutput] = await getOutputs('outside-ejs')
-  expect(ejsOutput).toBe(htmlOutput)
-})
+  test('includes ejs partials and can pass ejs options', async () => {
+    const [correctOutputs, buildOutputs] = await getOutputs('include-partials')
+    expect(correctOutputs).toBe(buildOutputs)
+  })
 
-test('includes json files', async () => {
-  const [ejsOutput, htmlOutput] = await getOutputs('include-json')
-  expect(ejsOutput).toBe(htmlOutput)
-})
+  test('includes json files', async () => {
+    const [correctOutputs, buildOutputs] = await getOutputs('include-json')
+    expect(correctOutputs).toBe(buildOutputs)
+  })
 
-test('includes common js modules', async () => {
-  const [ejsOutput, htmlOutput] = await getOutputs('include-common-js')
-  expect(ejsOutput).toBe(htmlOutput)
-})
+  test('includes common js modules', async () => {
+    const [correctOutputs, buildOutputs] = await getOutputs('include-common-js')
+    expect(correctOutputs).toBe(buildOutputs)
+  })
 
-test('includes node modules', async () => {
-  const [ejsOutput, htmlOutput] = await getOutputs('include-node-modules')
-  expect(ejsOutput).toBe(htmlOutput)
-})
+  test('includes node modules', async () => {
+    const [correctOutputs, buildOutputs] = await getOutputs('include-node-modules')
+    expect(correctOutputs).toBe(buildOutputs)
+  })
 
-test('does the path alias work', async () => {
-  const [ejsOutput, htmlOutput] = await getOutputs('path-alias')
-  expect(ejsOutput).toBe(htmlOutput)
+  test('does the path alias work', async () => {
+    const [correctOutputs, buildOutputs] = await getOutputs('path-alias')
+    expect(correctOutputs).toBe(buildOutputs)
+  })
 })

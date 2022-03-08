@@ -1,6 +1,6 @@
 # config
 .eslintrc.js
-babel.config.js
+*.config.js
 
 # git
 .gitkeep
