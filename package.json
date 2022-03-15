@@ -29,7 +29,7 @@
     "lint:fix": "eslint . --ext .ts --cache --fix",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "test:webpack-build": "webpack --config __tests__/webpack.config.js",
+    "test:webpack-build": "NODE_ENV=test webpack --config __tests__/webpack.config.js",
     "test": "yarn build && yarn test:webpack-build && jest",
     "tsc": "tsc"
   },

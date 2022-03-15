@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs'
+import { resolve } from 'path'
 
 import { compile, Options, Data } from 'ejs'
 import { LoaderContext } from 'webpack'
@@ -62,8 +63,9 @@ export type htmlWebpackPluginTemplateCustomizerConfig = {
 }
 
 export function htmlWebpackPluginTemplateCustomizer(config: htmlWebpackPluginTemplateCustomizerConfig) {
-  const htmlLoader = `${require.resolve('html-loader')}` // get html-loader entry path
-  const templateEjsLoader = `${require.resolve('template-ejs-loader')}` // get template-ejs-loader entry path
+  const htmlLoader = require.resolve('html-loader') // get html-loader entry path
+  const templateEjsLoader =
+    process.env.NODE_ENV === 'test' ? resolve(process.cwd(), 'lib/index.js') : require.resolve('template-ejs-loader') // get template-ejs-loader entry path
 
   let htmlLoaderOption = `${customStringify(config.htmlLoaderOption, 'htmlLoaderOption : ')}` // get html-loader option
   let templateEjsLoaderOption = `${customStringify(config.templateEjsLoaderOption, 'templateEjsLoaderOption : ')}` // get template-ejs-loader option
