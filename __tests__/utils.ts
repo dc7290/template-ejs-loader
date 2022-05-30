@@ -3,7 +3,7 @@ import { promisify } from 'util'
 
 const readFilePromise = promisify(_readFile)
 
-export const readFile = async (path: string, options = 'utf8') => minify(await readFilePromise(path, options))
+export const readFile = async (path: string, options = 'utf8' as const) => minify(await readFilePromise(path, options))
 
 export const minify = (str: string) =>
   str
