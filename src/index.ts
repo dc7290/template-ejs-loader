@@ -27,9 +27,7 @@ const resolveRequirePaths = async (context: EjsLoaderContext, content: string) =
 
     if (requestSource !== null) {
       const result = await context.getResolve()(context.context, requestSource)
-      // eslint-disable-next-line no-console
-      console.log(result)
-      resultContent = resultContent.replace(matches[1], `require('${result}')`)
+      resultContent = resultContent.replace(matches[1], `require('${resolve(result)}')`)
     }
 
     matches = requirePattern.exec(content)
