@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { resolve } from 'path'
+import { resolve, sep } from 'path'
 
 import { compile, Options, Data } from 'ejs'
 import { LoaderContext } from 'webpack'
@@ -26,7 +26,10 @@ const resolveRequirePaths = async (context: EjsLoaderContext, content: string) =
     const requestSource = matchFilename !== null ? matchFilename[0].replace(/['"`]/g, '') : null
 
     if (requestSource !== null) {
-      const result = await context.getResolve()(context.context, requestSource)
+      let result = await context.getResolve()(context.context, requestSource)
+      if (sep === '\\') {
+        result = result.replace(/\\/g, '\\\\')
+      }
       resultContent = resultContent.replace(matches[1], `require('${result}')`)
     }
 
