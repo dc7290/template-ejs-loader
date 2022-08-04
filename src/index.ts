@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { resolve, sep } from 'path'
 
-import { compile, Options, Data } from 'ejs'
+import { compile, Data, IncluderResult, Options } from 'ejs'
 import { LoaderContext } from 'webpack'
 
 import type { AdditionalData, SourceMap } from './types'
@@ -99,14 +99,12 @@ export default async function ejsLoader(
 
   const originalIncluder = loaderOptions.includer ?? null
   const customizeIncluder = (originalPath: string, parsedPath: string) => {
-    this.addDependency(parsedPath)
+    let includerResult: IncluderResult = { filename: parsedPath }
     if (originalIncluder !== null) {
-      return originalIncluder(originalPath, parsedPath)
-    } else {
-      return {
-        filename: parsedPath,
-      }
+      includerResult = originalIncluder(originalPath, parsedPath)
     }
+    this.addDependency(includerResult.filename || parsedPath)
+    return includerResult
   }
 
   loaderOptions.includer = customizeIncluder
